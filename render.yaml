@@ -1,0 +1,28 @@
+# Blueprint do Render: um serviço web (API + front-end) e um PostgreSQL.
+# O banco gratuito do Render expira; use um plano pago para produção (ver docs/escopo.md, seção 11).
+services:
+  - type: web
+    name: arthsports-pedidos
+    runtime: node
+    plan: starter
+    region: oregon
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: arthsports-db
+          property: connectionString
+      # Senha inicial do Eduardo. Defina no painel do Render no primeiro deploy.
+      - key: ADMIN_PASSWORD
+        sync: false
+
+databases:
+  - name: arthsports-db
+    plan: basic-256mb
+    region: oregon
