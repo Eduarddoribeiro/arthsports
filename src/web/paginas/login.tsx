@@ -17,7 +17,7 @@ export function PaginaLogin() {
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-[420px] flex-col justify-center px-5 py-10">
-      <img src="/logo.webp" alt="ARTH Sports" className="mb-10 w-[150px]" />
+      <img src="/logo.png" alt="ARTH Sports" className="mb-10 w-[150px]" />
       <h1 className="titulo text-[52px]">Entrar</h1>
       <p className="mt-2 mb-8 text-cinza-medio">Pedidos de fardamento</p>
       <form onSubmit={form.handleSubmit((v) => entrar.mutate(v))} className="flex flex-col gap-6" noValidate>

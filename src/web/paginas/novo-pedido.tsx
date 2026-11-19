@@ -79,7 +79,7 @@ function Pecas({ form, aberto, setAberto }: { form: Form; aberto: number | null;
 
   return (
     <section aria-labelledby="t-pecas">
-      <h2 id="t-pecas" className="rotulo mb-3">
+      <h2 id="t-pecas" className="secao marcador mb-3">
         Peças
       </h2>
       {itens.fields.length > 0 && (
@@ -342,7 +342,7 @@ export function PaginaNovoPedido() {
         <div className="flex flex-col gap-8 lg:gap-10">
           <section aria-labelledby="t-cliente" className="flex flex-col gap-6 lg:rounded-[4px] lg:border lg:border-divisoria lg:bg-card lg:p-7">
             <div>
-              <h2 id="t-cliente" className="rotulo mb-3">
+              <h2 id="t-cliente" className="secao marcador mb-3">
                 Cliente
               </h2>
               <button
@@ -390,7 +390,7 @@ export function PaginaNovoPedido() {
 
         <div className="flex flex-col gap-6">
           <section aria-labelledby="t-resumo" className="hidden rounded-[4px] border border-divisoria bg-card p-7 lg:block">
-            <h2 id="t-resumo" className="rotulo mb-4">
+            <h2 id="t-resumo" className="secao marcador mb-4">
               Resumo
             </h2>
             <dl className="flex flex-col gap-3 border-b border-divisoria pb-5 text-[17px]">

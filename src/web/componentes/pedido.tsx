@@ -1,31 +1,53 @@
 import { Link } from "react-router";
 import type { PedidoResumo } from "@shared/api";
-import { diasDeAtraso, ETAPAS, NOME_ETAPA_LONGO, proximaEtapa, SITUACAO_ETAPA, type Etapa } from "@shared/dominio";
+import { diasDeAtraso, ETAPAS, NOME_ETAPA, NOME_ETAPA_LONGO, proximaEtapa, SITUACAO_ETAPA, type Etapa } from "@shared/dominio";
 import { textoAvancar, useAvancarEtapa } from "@/lib/consultas";
 import { diaMes, numeroPedido, plural } from "@/lib/formato";
 import { cn } from "@/lib/utils";
 import { Botao } from "./ui/botao";
 
-/** Quatro segmentos: branco = concluído, cinza claro = atual, #333 = restante. */
-export function BarraEtapas({ etapa, className, grossa }: { etapa: Etapa; className?: string; grossa?: boolean }) {
+/** Quatro segmentos inclinados: branco = concluído, cinza claro = atual, #333 = restante. */
+export function BarraEtapas({
+  etapa,
+  className,
+  grossa,
+  rotulos,
+}: {
+  etapa: Etapa;
+  className?: string;
+  grossa?: boolean;
+  rotulos?: boolean;
+}) {
   const atual = ETAPAS.indexOf(etapa);
   const entregue = etapa === "entregue";
   return (
-    <div
-      role="img"
-      aria-label={`Etapa ${atual + 1} de 4: ${NOME_ETAPA_LONGO[etapa]}`}
-      className={cn("grid grid-cols-4 gap-2", className)}
-    >
-      {ETAPAS.map((e, i) => (
-        <span
-          key={e}
-          className={cn(
-            "block",
-            grossa ? "h-5" : "h-2.5",
-            i < atual || entregue ? "bg-white" : i === atual ? "bg-atraso" : "bg-divisoria",
-          )}
-        />
-      ))}
+    <div className={className}>
+      <div role="img" aria-label={`Etapa ${atual + 1} de 4: ${NOME_ETAPA_LONGO[etapa]}`} className="grid grid-cols-4 gap-1.5 px-1">
+        {ETAPAS.map((e, i) => (
+          <span
+            key={e}
+            className={cn(
+              "block -skew-x-[24deg]",
+              grossa ? "h-5" : "h-3",
+              i < atual || entregue ? "bg-white" : i === atual ? "bg-atraso" : "bg-divisoria",
+            )}
+          />
+        ))}
+      </div>
+      {rotulos && (
+        <div aria-hidden className="mt-2 grid grid-cols-4 gap-1.5 text-[13px]">
+          {ETAPAS.map((e, i) => (
+            <span
+              key={e}
+              className={cn(
+                i === atual && !entregue ? "font-semibold text-white" : i < atual || entregue ? "text-cinza-medio" : "text-cinza",
+              )}
+            >
+              {NOME_ETAPA[e]}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -75,12 +97,12 @@ export function BotaoAvancar({
   );
 }
 
-/** Linha de pedido: cliente, peças, prazo em destaque e barra de etapas. */
+/** Linha de pedido: número, cliente, prazo em destaque, etapas e ação. */
 export function CartaoPedido({
   pedido,
   hoje,
   acaoNoCelular = true,
-  mostrarNumero = false,
+  mostrarNumero = true,
 }: {
   pedido: PedidoResumo;
   hoje: Date;
@@ -89,37 +111,56 @@ export function CartaoPedido({
 }) {
   const s = situacao(pedido, hoje);
   const atrasado = s.tipo === "atrasado";
+  const apagado = s.tipo === "cancelado";
   return (
     <article
       className={cn(
-        "relative rounded-[4px] bg-card",
-        atrasado ? "border border-white border-l-[10px] border-l-atraso" : "border border-divisoria",
+        "group relative overflow-hidden rounded-[4px] bg-card transition-colors",
+        atrasado ? "border border-white" : "border border-divisoria hover:border-cinza",
+        apagado && "opacity-60",
       )}
     >
-      <div className="flex flex-col gap-4 p-5 pl-6 lg:grid lg:grid-cols-[1fr_200px_auto] lg:items-center lg:gap-8 lg:p-7">
-        <div className="flex items-start justify-between gap-4 lg:block">
-          <div className="min-w-0">
-            <h3 className="text-[19px] font-semibold lg:text-[21px]">
-              <Link to={`/pedidos/${pedido.id}`} className="after:absolute after:inset-0 hover:underline">
-                {pedido.clienteNome}
-              </Link>
-            </h3>
-            <p className="mt-1 text-cinza-medio">
-              {mostrarNumero && <span>#{numeroPedido(pedido.id)} · </span>}
-              {linhaDetalhe(pedido, atrasado)}
-            </p>
+      {atrasado && <span aria-hidden className="listras absolute inset-y-0 left-0 w-3 text-atraso" />}
+      <div className={cn("grid gap-5 p-5 lg:grid-cols-[1fr_auto] lg:gap-x-10 lg:p-7", atrasado && "pl-8 lg:pl-10")}>
+        <div className="min-w-0">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              {mostrarNumero && (
+                <p className="titulo text-[20px] tracking-[0.04em] text-cinza" aria-label={`Pedido ${numeroPedido(pedido.id)}`}>
+                  #{numeroPedido(pedido.id)}
+                </p>
+              )}
+              <h3 className="titulo mt-1 text-[30px] lg:text-[36px]">
+                <Link to={`/pedidos/${pedido.id}`} className="after:absolute after:inset-0 group-hover:underline group-hover:decoration-2 group-hover:underline-offset-4">
+                  {pedido.clienteNome}
+                </Link>
+              </h3>
+            </div>
+            <PrazoDestaque texto={s.texto} atrasado={atrasado} className="pt-1 text-right lg:hidden" />
           </div>
-          <p className={cn("titulo shrink-0 text-right text-[24px] lg:hidden", atrasado ? "text-atraso" : "text-ok")}>
-            {s.texto}
-          </p>
-          <BarraEtapas etapa={pedido.etapaAtual} className="mt-4 hidden lg:grid" />
+          <p className="mt-2 text-[16px] text-cinza-medio">{linhaDetalhe(pedido, atrasado)}</p>
+          <BarraEtapas etapa={pedido.etapaAtual} rotulos className="mt-5 lg:max-w-[520px]" />
         </div>
-        <BarraEtapas etapa={pedido.etapaAtual} className="lg:hidden" />
-        <p className={cn("titulo hidden text-[30px] lg:block", atrasado ? "text-atraso" : "text-ok")}>{s.texto}</p>
-        <div className={cn("relative z-10", !acaoNoCelular && "hidden lg:block")}>
-          <BotaoAvancar pedido={pedido} className="w-full lg:min-w-[240px]" tamanho="grande" />
+
+        <div className="flex flex-col justify-between gap-5 lg:items-end">
+          <PrazoDestaque texto={s.texto} atrasado={atrasado} className="hidden text-right lg:block" />
+          <div className={cn("relative z-10", !acaoNoCelular && "hidden lg:block")}>
+            <BotaoAvancar pedido={pedido} className="w-full lg:w-auto lg:min-w-[250px]" tamanho="grande" />
+          </div>
         </div>
       </div>
     </article>
+  );
+}
+
+/** "4 DIAS / DE ATRASO" ou "ENTREGA / 02/12", em duas linhas de placar. */
+function PrazoDestaque({ texto, atrasado, className }: { texto: string; atrasado: boolean; className?: string }) {
+  const m = texto.match(/^(\d+ dias?) (de atraso)$/) ?? texto.match(/^(Entrega|Entregue) ?(.*)$/);
+  const [topo, base] = m ? [m[1], m[2]] : [texto, ""];
+  return (
+    <p className={cn("shrink-0", className)}>
+      <span className={cn("titulo block text-[30px] lg:text-[40px]", atrasado ? "text-white" : "text-ok")}>{atrasado ? topo : base || topo}</span>
+      <span className={cn("rotulo mt-1 block", atrasado && "text-atraso")}>{atrasado ? base : base ? topo : ""}</span>
+    </p>
   );
 }

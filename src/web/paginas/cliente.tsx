@@ -106,7 +106,7 @@ export function PaginaCliente() {
         )}
 
         <section aria-labelledby="t-historico">
-          <h2 id="t-historico" className="rotulo mb-5 text-[14px]">
+          <h2 id="t-historico" className="secao marcador mb-5">
             Histórico
           </h2>
           {c.pedidos.length === 0 ? (

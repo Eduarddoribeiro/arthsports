@@ -35,10 +35,11 @@ function FaixaSituacao({ p }: { p: PedidoDetalhe }) {
   return (
     <div
       className={cn(
-        "flex items-end justify-between gap-4 rounded-[4px] bg-elevado px-7 py-5",
-        s.tipo === "atrasado" ? "border-2 border-white" : "border border-divisoria",
+        "relative flex items-end justify-between gap-4 overflow-hidden rounded-[4px] bg-elevado px-7 py-5",
+        s.tipo === "atrasado" ? "border-2 border-white pl-11" : "border border-divisoria",
       )}
     >
+      {s.tipo === "atrasado" && <span aria-hidden className="listras absolute inset-y-0 left-0 w-4 text-atraso" />}
       <div>
         <p className="rotulo text-[15px] text-white">{rotulo}</p>
         <p className="titulo mt-1 text-[52px] lg:text-[44px]">{grande}</p>
@@ -54,7 +55,7 @@ function Etapas({ p }: { p: PedidoDetalhe }) {
   const quando = (i: number) => p.etapas.findLast((r) => r.etapa === ETAPAS[i])?.em;
   return (
     <section aria-labelledby="t-etapas">
-      <h2 id="t-etapas" className="rotulo mb-4 text-[14px]">
+      <h2 id="t-etapas" className="secao marcador mb-4">
         {entregue || p.status === "cancelado" ? "Etapas" : "Etapa atual"}
       </h2>
       <BarraEtapas etapa={p.etapaAtual} grossa />
@@ -96,7 +97,7 @@ function Grade({ p }: { p: PedidoDetalhe }) {
   const tamanhos = TAMANHOS.filter((t) => soma[t] > 0);
   return (
     <section aria-labelledby="t-grade">
-      <h2 id="t-grade" className="rotulo mb-4 text-[14px]">
+      <h2 id="t-grade" className="secao marcador mb-4">
         <span className="lg:hidden">Grade</span>
         <span className="hidden lg:inline">Peças e grade</span>
       </h2>
@@ -297,7 +298,7 @@ export function PaginaPedido() {
 
         <div className="flex flex-col gap-10">
           <section aria-labelledby="t-pagamento" className="border-t border-fina pt-8 lg:rounded-[4px] lg:border lg:border-divisoria lg:bg-card lg:p-7">
-            <h2 id="t-pagamento" className="rotulo mb-4 hidden text-[14px] lg:block">
+            <h2 id="t-pagamento" className="secao marcador mb-4 hidden lg:flex">
               Pagamento
             </h2>
             <dl className="hidden flex-col gap-3 border-b border-divisoria pb-5 text-[17px] lg:flex">
@@ -333,7 +334,7 @@ export function PaginaPedido() {
           </section>
 
           <section aria-labelledby="t-cliente" className="rounded-[4px] border border-divisoria bg-card p-7">
-            <h2 id="t-cliente" className="rotulo mb-4 text-[14px]">
+            <h2 id="t-cliente" className="secao marcador mb-4">
               Cliente
             </h2>
             <p className="text-[21px] font-semibold">{p.cliente.nome}</p>

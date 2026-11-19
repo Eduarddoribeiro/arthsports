@@ -40,11 +40,14 @@ function painel(pedidos: PedidoResumo[], hoje: Date) {
   };
 }
 
+/** Célula de placar: número grande inclinado e legenda. Atraso ganha a faixa listrada. */
 function Numero({ valor, rotulo, destaque }: { valor: number; rotulo: string; destaque?: boolean }) {
+  const alerta = destaque && valor > 0;
   return (
-    <div className="px-7 py-6 lg:px-9 lg:py-8">
-      <p className={cn("titulo text-[44px] lg:text-[56px]", destaque && valor > 0 ? "text-atraso" : "text-white")}>{valor}</p>
-      <p className="mt-1 text-cinza-medio lg:text-[17px]">{rotulo}</p>
+    <div className="relative px-6 pt-7 pb-6 lg:px-9 lg:pt-9 lg:pb-8">
+      {alerta && <span aria-hidden className="listras absolute inset-x-0 top-0 h-2 text-atraso" />}
+      <p className={cn("titulo text-[52px] lg:text-[76px]", alerta ? "text-white" : destaque ? "vazado text-cinza" : "text-white")}>{valor}</p>
+      <p className="rotulo mt-2 text-cinza-medio">{rotulo}</p>
     </div>
   );
 }
@@ -64,15 +67,17 @@ export function PaginaHoje() {
     <div>
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="rotulo text-[14px] lg:text-[15px]">
-            {diaSemana(hoje)} · {diaMes(hoje)}
-            <span className="hidden lg:inline">/{hoje.getFullYear()}</span>
+          <p className="secao marcador">
+            <span>
+              {diaSemana(hoje)} · {diaMes(hoje)}
+              <span className="hidden lg:inline">/{hoje.getFullYear()}</span>
+            </span>
           </p>
-          <h1 className="titulo mt-1 text-[88px] lg:text-[110px]">Hoje</h1>
+          <h1 className="titulo mt-3 text-[96px] lg:text-[140px]">Hoje</h1>
         </div>
         <div className="text-right lg:hidden">
-          <p className="titulo text-[64px]">{d.pecasNaRua}</p>
-          <p className="text-cinza-medio">peças na rua</p>
+          <p className="titulo text-[68px]">{d.pecasNaRua}</p>
+          <p className="rotulo mt-1 text-cinza-medio">peças na rua</p>
         </div>
         <div className="hidden gap-4 pb-2 lg:flex">
           <Botao variante="secundario" tamanho="grande" asChild>
@@ -105,7 +110,7 @@ export function PaginaHoje() {
           ) : (
             <>
               <section aria-labelledby="t-precisa">
-                <h2 id="t-precisa" className="rotulo mb-4 text-[14px]">
+                <h2 id="t-precisa" className="secao marcador mb-4">
                   Precisa de você
                 </h2>
                 {d.atrasados.length ? (
@@ -123,7 +128,7 @@ export function PaginaHoje() {
 
               {d.noPrazo.length > 0 && (
                 <section aria-labelledby="t-prazo">
-                  <h2 id="t-prazo" className="rotulo mb-4 text-[14px]">
+                  <h2 id="t-prazo" className="secao marcador mb-4">
                     No prazo
                   </h2>
                   <div className="flex flex-col gap-5">
@@ -139,7 +144,7 @@ export function PaginaHoje() {
 
         <aside className="flex flex-col gap-12">
           <section aria-labelledby="t-etapas">
-            <h2 id="t-etapas" className="rotulo mb-4 text-[14px]">
+            <h2 id="t-etapas" className="secao marcador mb-4">
               Peças por etapa
             </h2>
             <dl className="flex flex-col gap-6 rounded-[4px] border border-divisoria bg-card p-7">
@@ -147,11 +152,11 @@ export function PaginaHoje() {
                 <div key={e.nome}>
                   <div className="flex justify-between text-[17px]">
                     <dt>{e.nome}</dt>
-                    <dd className="font-semibold">{e.total}</dd>
+                    <dd className="titulo text-[24px]">{e.total}</dd>
                   </div>
-                  <div className="mt-2 h-2.5 bg-divisoria">
+                  <div className="mt-2 h-3 -skew-x-[24deg] bg-divisoria">
                     <div
-                      className={cn("h-full", e.concluido ? "bg-ok" : "bg-white")}
+                      className={cn("h-full origin-left", e.concluido ? "listras text-ok" : "bg-white")}
                       style={{ width: `${(e.total / maxEtapa) * 100}%` }}
                     />
                   </div>
@@ -162,7 +167,7 @@ export function PaginaHoje() {
 
           {d.noPrazo.length > 0 && (
             <section aria-labelledby="t-proximas" className="hidden lg:block">
-              <h2 id="t-proximas" className="rotulo mb-4 text-[14px]">
+              <h2 id="t-proximas" className="secao marcador mb-4">
                 Próximas entregas
               </h2>
               <ul className="flex flex-col gap-3 rounded-[4px] border border-divisoria bg-card p-7 text-[17px]">
@@ -171,7 +176,7 @@ export function PaginaHoje() {
                     <Link to={`/pedidos/${p.id}`} className="truncate hover:underline">
                       {p.clienteNome}
                     </Link>
-                    <span className="font-semibold">{diaMes(p.entregaCalculada)}</span>
+                    <span className="titulo text-[22px]">{diaMes(p.entregaCalculada)}</span>
                   </li>
                 ))}
               </ul>

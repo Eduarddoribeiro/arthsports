@@ -28,6 +28,7 @@ function useSair() {
   };
 }
 
+/** Só a letra muda: ativo fica cinza, hover clareia. Sem fundo no botão. */
 function LinkTopo({ para, children }: { para: string; children: ReactNode }) {
   return (
     <NavLink
@@ -35,8 +36,8 @@ function LinkTopo({ para, children }: { para: string; children: ReactNode }) {
       end={para === "/"}
       className={({ isActive }) =>
         cn(
-          "flex min-h-[52px] items-center rounded-[4px] px-6 text-[19px] transition-colors",
-          isActive ? "bg-white font-semibold text-black" : "text-white hover:bg-white/10",
+          "titulo flex min-h-12 items-center px-1 text-[26px] tracking-[0.02em] transition-colors duration-150",
+          isActive ? "text-cinza" : "text-white hover:text-cinza-medio",
         )
       }
     >
@@ -51,7 +52,10 @@ function LinkInferior({ para, children }: { para: string; children: ReactNode })
       to={para}
       end={para === "/"}
       className={({ isActive }) =>
-        cn("flex min-h-14 flex-1 items-center justify-center text-[17px]", isActive ? "font-semibold text-black" : "text-[#555]")
+        cn(
+          "titulo flex min-h-14 flex-1 items-center justify-center text-[19px] tracking-[0.03em] transition-colors",
+          isActive ? "text-cinza" : "text-white",
+        )
       }
     >
       {children}
@@ -73,10 +77,10 @@ export function Layout() {
       </a>
 
       {/* Celular: cabeçalho com logo */}
-      <header className="flex items-center justify-between px-5 pt-[max(16px,env(safe-area-inset-top))] lg:hidden">
-        <Link to="/" className="flex items-center gap-6" aria-label="ARTH Sports, ir para Hoje">
-          <img src="/logo.webp" alt="" className="h-[52px] w-auto" />
-          <span className="rotulo">{secao}</span>
+      <header className="sticky top-0 z-30 flex items-center justify-between border-b border-fina bg-black/90 px-5 pt-[max(10px,env(safe-area-inset-top))] pb-2.5 backdrop-blur-md lg:hidden">
+        <Link to="/" className="flex items-center gap-5" aria-label="ARTH Sports, ir para Hoje">
+          <img src="/logo.png" alt="" className="h-[48px] w-auto" />
+          <span className="secao marcador">{secao}</span>
         </Link>
         <Menu
           gatilho={
@@ -91,23 +95,27 @@ export function Layout() {
       </header>
 
       {/* PC: barra superior com o logo saindo da linha */}
-      <header className="relative hidden h-[130px] border-b border-white lg:block">
-        <nav aria-label="Principal" className="mx-auto flex h-full max-w-[1280px] items-center justify-between px-10">
-          <div className="flex gap-3">
+      <header className="sticky top-0 z-30 hidden h-[96px] border-b border-white bg-black/90 backdrop-blur-md lg:block">
+        <nav aria-label="Principal" className="relative mx-auto flex h-full max-w-[1280px] items-center justify-between px-10">
+          <div className="flex gap-10">
             <LinkTopo para="/">Hoje</LinkTopo>
             <LinkTopo para="/pedidos">Pedidos</LinkTopo>
           </div>
-          <Link to="/" className="absolute top-6 left-1/2 -translate-x-1/2" aria-label="ARTH Sports, ir para Hoje">
-            <img src="/logo.webp" alt="" className="w-[150px]" />
+          <Link
+            to="/"
+            className="absolute top-3 left-1/2 -translate-x-1/2 transition-transform duration-200 hover:-rotate-2"
+            aria-label="ARTH Sports, ir para Hoje"
+          >
+            <img src="/logo.png" alt="" className="w-[124px] drop-shadow-[0_6px_14px_rgba(0,0,0,0.9)]" />
           </Link>
-          <div className="flex gap-3">
+          <div className="flex gap-10">
             <LinkTopo para="/clientes">Clientes</LinkTopo>
             <LinkTopo para="/pecas">Peças e prazos</LinkTopo>
           </div>
         </nav>
       </header>
 
-      <main id="conteudo" className={cn("mx-auto max-w-[1280px] px-5 pt-6 lg:px-10 lg:pt-16", navInferior ? "pb-32 lg:pb-16" : "pb-40 lg:pb-16")}>
+      <main id="conteudo" className={cn("mx-auto max-w-[1280px] px-5 pt-6 lg:px-10 lg:pt-20", navInferior ? "pb-32 lg:pb-16" : "pb-40 lg:pb-16")}>
         <Outlet />
       </main>
 
@@ -118,15 +126,15 @@ export function Layout() {
       </footer>
 
       {navInferior && (
-        <nav aria-label="Principal" className="pb-seguro fixed inset-x-0 bottom-0 z-30 bg-white lg:hidden">
+        <nav aria-label="Principal" className="pb-seguro fixed inset-x-0 bottom-0 z-30 border-t border-white bg-black lg:hidden">
           <div className="flex h-[72px] items-center">
             <LinkInferior para="/">Hoje</LinkInferior>
             <Link
               to="/pedidos/novo"
               aria-label="Novo pedido"
-              className="-mt-8 grid size-[72px] shrink-0 place-items-center rounded-full border-2 border-white bg-[#1a1a1a] text-white shadow-lg active:scale-95"
+              className="-mt-9 grid size-[68px] shrink-0 -skew-x-6 place-items-center rounded-[4px] bg-white text-black shadow-[0_0_0_6px_black] active:scale-95"
             >
-              <Plus className="size-9" strokeWidth={1.75} />
+              <Plus className="size-9 skew-x-6" strokeWidth={2.25} />
             </Link>
             <LinkInferior para="/pedidos">Pedidos</LinkInferior>
             <LinkInferior para="/clientes">Clientes</LinkInferior>
