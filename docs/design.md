@@ -30,21 +30,26 @@ Base: o logo da ARTH Sports, em preto e branco. Tudo fica em preto, branco e cin
 ## Componentes
 - **Botão principal:** fundo branco, texto preto.
 - **Botão secundário:** borda branca de 1,5 px, fundo transparente.
-- **Barra de etapas:** quatro segmentos. Preenchido em branco = concluído; atual = segmento cinza claro; restante = #333333. O nome da etapa atual fica em negrito.
+- **Barra de etapas:** quatro segmentos inclinados, com o nome das etapas embaixo. Preenchido em branco = concluído; atual = segmento cinza claro; restante = #333333. O nome da etapa atual fica em negrito.
 - **Linha de pedido:** nome do cliente, peças, prazo em destaque e barra de etapas. No PC, o botão de avançar fica na mesma linha.
-- **Atraso:** borda esquerda grossa cinza claro, texto "X dias de atraso" e a barra de etapas.
+- **Atraso:** faixa esquerda com listras diagonais cinza claro, texto "X dias de atraso" e a barra de etapas.
 - **Faixa de atraso (tela do pedido):** bloco de destaque com borda branca de 2 px.
-- **Navegação celular:** barra inferior com Hoje, botão "+" central (novo pedido), Pedidos e Clientes.
-- **Navegação PC:** barra superior. À esquerda, Hoje e Pedidos; no centro, o logo; à direita, Clientes e Peças e prazos. A tela ativa aparece com fundo branco e texto preto.
+- **Navegação celular:** barra inferior preta e fixa com Hoje, botão "+" central branco e inclinado (novo pedido), Pedidos e Clientes. Cabeçalho fixo no topo.
+- **Navegação PC:** barra superior fixa ao rolar. À esquerda, Hoje e Pedidos; no centro, o logo; à direita, Clientes e Peças e prazos. Links em Anton inclinado, sem fundo: a tela ativa fica com a letra cinza (#8C8C8C) e o hover muda só a cor da letra.
 
 ## Logo
-- Arquivo: `public/logo.webp` (fundo transparente, letras brancas com contorno).
-- Cabeçalho do celular: 52 px. Barra superior do PC: 170 px, com o logo saindo um pouco da barra.
+- Arquivo: `public/logo.png` (fundo transparente, recortado do `logo.webp` original, que tem fundo branco).
+- Cabeçalho do celular: 48 px. Barra superior do PC: 96 px de altura, logo com 124 px saindo um pouco da barra.
 
 ## Telas
 Celular: Hoje, Pedido, Novo pedido, Cliente.
 PC: Hoje, Pedido, Novo pedido, Cliente, com a mesma estrutura de conteúdo, mas aproveitando a largura.
 Os prints ficam em `docs/telas/`.
+
+## Identidade (tirada do logo)
+- Títulos e números em Anton inclinado, como as letras do logo.
+- Listras diagonais de uniforme marcam atraso (cartões, placar e faixa do pedido).
+- Títulos de seção com um marcador inclinado antes do texto.
 
 ## Princípios
 1. Um toque para avançar etapa.

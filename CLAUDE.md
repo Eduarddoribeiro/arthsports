@@ -6,7 +6,7 @@ Sistema interno da ARTH Sports para acompanhar pedidos de uniformes (times e esc
 - `docs/escopo.md`: fonte da verdade do que está no MVP, na Fase 2 e fora do escopo. Pedido novo que não está no escopo vai para a Fase 2 ou é avaliado antes de ser feito.
 - `docs/design.md`: sistema visual (cores, tipografia, componentes e telas).
 - `docs/telas/`: prints das telas de celular e PC.
-- `public/logo.webp`: logo da ARTH Sports, com fundo transparente.
+- `public/logo.png`: logo da ARTH Sports com fundo transparente (usar este). `logo.webp` é o original, com fundo branco.
 
 ## Stack decidida
 - **Front-end:** React com TypeScript, Vite, Tailwind CSS e componentes shadcn/ui; React Router; TanStack Query; React Hook Form com Zod; date-fns.
