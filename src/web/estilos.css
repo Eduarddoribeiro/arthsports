@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-fundo: #000000;
+  --color-card: #141414;
+  --color-elevado: #1a1a1a;
+  --color-divisoria: #333333;
+  --color-fina: #222222;
+  --color-cinza-medio: #b3b3b3;
+  --color-cinza: #8c8c8c;
+  --color-atraso: #9e9e9e;
+  --color-ok: #b5b5b5;
+
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-titulo: "Anton", "Impact", sans-serif;
+
+  --radius-card: 4px;
+  --radius-campo: 8px;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-fundo font-sans text-white antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}
+
+@utility titulo {
+  font-family: var(--font-titulo);
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+}
+
+@utility rotulo {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-cinza);
+}
+
+@utility pb-seguro {
+  padding-bottom: env(safe-area-inset-bottom);
+}
